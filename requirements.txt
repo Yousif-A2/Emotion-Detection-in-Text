@@ -5,3 +5,4 @@ neattext
 plotly
 scikit-learn
 joblib
+psycopg2-binary==2.9.5

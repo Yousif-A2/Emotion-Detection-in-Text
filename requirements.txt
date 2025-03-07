@@ -1,8 +1,9 @@
-numpy
-pandas
-seaborn
-neattext
-plotly
-scikit-learn
-joblib
-psycopg2-binary==2.9.5
+streamlit==1.30.0
+pandas==2.1.3
+numpy==1.26.2
+altair==5.1.2
+plotly==5.18.0
+joblib==1.3.2
+scikit-learn==1.3.2
+psycopg2-binary==2.9.9
+pytz==2023.3

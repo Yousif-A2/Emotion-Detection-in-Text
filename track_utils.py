@@ -16,7 +16,9 @@ def init_connection_pool():
         database=st.secrets["db_name"],
         user=st.secrets["db_user"],
         password=st.secrets["db_password"],
-        port=st.secrets["db_port"]
+        port=st.secrets["db_port"],
+        sslmode=st.secrets["db_sslmode"]
+
     )
 
 # Get a connection from the pool

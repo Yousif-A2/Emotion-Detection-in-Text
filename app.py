@@ -30,18 +30,18 @@ def main():
     #     }
     # </style>
     # """, unsafe_allow_html=True)
-    hide_streamlit_style = """
-        <style>
+    # hide_streamlit_style = """
+    #     <style>
         
-        [data-testid="stSidebarNav"] {
-            display: none;  /* Hides sidebar navigation items */
-        }
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        </style>
+    #     [data-testid="stSidebarNav"] {
+    #         display: none;  /* Hides sidebar navigation items */
+    #     }
+    #     #MainMenu {visibility: hidden;}
+    #     footer {visibility: hidden;}
+    #     </style>
 
-        """
-    st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+    #     """
+    # st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
     # Create custom sidebar
     with st.sidebar:

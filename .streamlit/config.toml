@@ -1,2 +1,5 @@
-[ui]
-client.showSidebarNavigation = true
+[theme]
+base="light"
+primaryColor="#6c63ff"
+backgroundColor="#f9f7fe"
+textColor="#2a2a72"

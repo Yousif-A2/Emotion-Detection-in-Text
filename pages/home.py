@@ -103,26 +103,26 @@ def render_home_page():
                 emotion_color = EMOTION_COLORS.get(prediction.lower(), COLOR_PALETTE["primary"])
                 
                 st.markdown(f"""
-                <div class="card-container">
-                    <h3 style="margin-top: 0;">Your Text</h3>
+                            <div class="card-container">
+                                <h3 style="margin-top: 0;">Your Text</h3>
                     <div style="background-color: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
                         {raw_text}
-                    </div>
+                        </div>
                     
                     <h3>Emotion Detected</h3>
                     <div style="display: flex; align-items: center; margin-bottom: 10px;">
                         <span style="font-size: 2.5rem; margin-right: 15px;">{emoji_icon}</span>
-                        <div>
-                            <div style="font-size: 1.5rem; font-weight: 600; color: {emotion_color}; text-transform: capitalize;">
-                                {prediction}
-                            </div>
-                            <div style="color: #666; font-size: 0.9rem;">
-                                Confidence: {round(np.max(probability) * 100, 1)}%
-                            </div>
-                        </div>
+                    <div>
+                    <div style="font-size: 1.5rem; font-weight: 600; color: {emotion_color}; text-transform: capitalize;">
+                        {prediction}
                     </div>
-                </div>
-                """, unsafe_allow_html=True)
+                    <div style="color: #666; font-size: 0.9rem;">
+                        Confidence: {round(np.max(probability) * 100, 1)}%
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    """, unsafe_allow_html=True)
             
             with col2:
                 # Probability visualization card

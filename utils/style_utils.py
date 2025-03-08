@@ -36,7 +36,8 @@ def set_page_config():
         page_title="EmotionSense AI",
         page_icon="🧠",
         layout="wide",
-        initial_sidebar_state="expanded"
+        initial_sidebar_state="expanded", 
+        menu_items=None
     )
 
 def apply_custom_styles():
@@ -163,7 +164,7 @@ def apply_custom_styles():
     """
     st.markdown(custom_css, unsafe_allow_html=True)
 
-def render_gradient_header(title, subtitle=None):
+def render_gradient_header(title, subtitle):
     """Render a gradient header with optional subtitle"""
     # Create the header HTML
     header_html = f"""
@@ -173,18 +174,19 @@ def render_gradient_header(title, subtitle=None):
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem;">
             {title}
         </h1>
+    
     """
     
     # Add a divider
     header_html += f"""
-        <div style="height: 3px; width: 100px; margin: 0.5rem auto; 
-            background: linear-gradient(90deg, {COLOR_PALETTE['primary']}, {COLOR_PALETTE['secondary']}, {COLOR_PALETTE['tertiary']});
-            border-radius: 3px;"></div>
+    <div style="height: 3px; width: 500px; margin: 0.5rem auto; 
+        background: linear-gradient(45deg, {COLOR_PALETTE['primary']}, {COLOR_PALETTE['secondary']});
+        border-radius: 3px;"></div>
     """
     
     # Add subtitle if provided
     if subtitle:
-        header_html += f"""
+        header_html += f"""<div>
         <p style="color: {COLOR_PALETTE['text']}; font-size: 1.2rem; max-width: 700px; margin: 1rem auto;">
             {subtitle}
         </p>

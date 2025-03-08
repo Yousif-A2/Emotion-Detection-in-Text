@@ -6,19 +6,12 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Now import the modules
-try:
-    from utils.style_utils import set_page_config, apply_custom_styles, COLOR_PALETTE
-    from utils.track_utils import create_page_visited_table, create_emotionclf_table
-    from pages.home import render_home_page
-    from pages.monitor import render_monitor_page
-    from pages.about import render_about_page
-except ImportError:
-    # If the above imports fail, try direct imports
-    from style_utils import set_page_config, apply_custom_styles, COLOR_PALETTE
-    from track_utils import create_page_visited_table, create_emotionclf_table
-    from home import render_home_page
-    from monitor import render_monitor_page
-    from about import render_about_page
+
+from utils.style_utils import set_page_config, apply_custom_styles, COLOR_PALETTE
+from utils.track_utils import create_page_visited_table, create_emotionclf_table
+from pages.home import render_home_page
+from pages.monitor import render_monitor_page
+from pages.about import render_about_page
 
 def main():
     """Main application entry point"""
@@ -30,6 +23,26 @@ def main():
     create_page_visited_table()
     create_emotionclf_table()
     
+    # st.markdown("""
+    # <style>
+    #     [data-testid="stSidebarNav"] {
+    #         display: none;  /* Hides sidebar navigation items */
+    #     }
+    # </style>
+    # """, unsafe_allow_html=True)
+    hide_streamlit_style = """
+        <style>
+        
+        [data-testid="stSidebarNav"] {
+            display: none;  /* Hides sidebar navigation items */
+        }
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        </style>
+
+        """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
     # Create custom sidebar
     with st.sidebar:
         st.markdown(f"""
@@ -56,43 +69,36 @@ def main():
             "Monitor": {"icon": "📊", "description": "View analytics"},
             "About": {"icon": "ℹ️", "description": "Learn about the app"}
         }
-        
-        selected_option = None
-        
-        # Create custom menu buttons
+
+        # Initialize session state if needed
+        if 'current_page' not in st.session_state:
+            st.session_state['current_page'] = 'Home'
+
+        # Create custom styled buttons for navigation
         for option, details in menu_options.items():
-            button_style = (
-                f"background-color: {COLOR_PALETTE['primary']}; color: white; border-radius: 8px;" 
-                if option == st.session_state.get('current_page', 'Home') 
-                else f"background-color: transparent; color: {COLOR_PALETTE['text']}; border-radius: 8px;"
-            )
+            # Determine if this option is the active page
+            is_active = option == st.session_state.get('current_page', 'Home')
             
-            menu_html = f"""
-            <div style="padding: 0.5rem 1rem; margin-bottom: 0.5rem; cursor: pointer; {button_style}">
-                <div style="display: flex; align-items: center;">
-                    <span style="font-size: 1.2rem; margin-right: 10px;">{details['icon']}</span>
-                    <div>
-                        <div style="font-weight: 500;">{option}</div>
-                        <div style="font-size: 0.8rem; opacity: 0.8;">{details['description']}</div>
+            # For active button, just display styled HTML
+            if is_active:
+                st.markdown(f"""
+                <div style="background-color: {COLOR_PALETTE['primary']}; color: white; border-radius: 8px; padding: 0.5rem 1rem; margin-bottom: 0.5rem;">
+                    <div style="display: flex; align-items: center;">
+                        <span style="font-size: 1.2rem; margin-right: 10px;">{details['icon']}</span>
+                        <div>
+                            <div style="font-weight: 500;">{option}</div>
+                            <div style="font-size: 0.8rem; opacity: 0.8;">{details['description']}</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            """
-            
-            if st.markdown(menu_html, unsafe_allow_html=True):
-                selected_option = option
-        
-        # Fallback to standard selectbox (the markdown buttons are for visual styling only)
-        choice = st.selectbox(
-            "Select Page",
-            options=list(menu_options.keys()),
-            index=list(menu_options.keys()).index(st.session_state.get('current_page', 'Home')),
-            label_visibility="collapsed"
-        )
-        
-        # Update session state
-        st.session_state['current_page'] = choice
-        
+                """, unsafe_allow_html=True)
+            # For inactive buttons, use a regular Streamlit button
+            else:
+                btn_label = f"{details['icon']} {option}"
+                if st.button(btn_label, key=f"btn_{option}", use_container_width=True):
+                    st.session_state['current_page'] = option
+                    st.rerun()  # Rerun the app to update the UI
+
         # App info section
         st.markdown("""<br>""", unsafe_allow_html=True)
         st.markdown(f"""
@@ -107,11 +113,10 @@ def main():
             </p>
         </div>
         """, unsafe_allow_html=True)
-    
-    # Render the selected page
-    if choice == "Home":
+    # Render the selected page based on session state
+    if st.session_state['current_page'] == "Home":
         render_home_page()
-    elif choice == "Monitor":
+    elif st.session_state['current_page'] == "Monitor":
         render_monitor_page()
     else:  # About
         render_about_page()

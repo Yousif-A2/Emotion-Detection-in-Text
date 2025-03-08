@@ -13,12 +13,12 @@ try:
         render_gradient_header, 
         render_card, 
         get_emotion_icon,
-        create_altair_theme
+        create_altair_therender_cardme
     )
 except ImportError:
     # Fallback to direct imports
-    from track_utils import add_page_visited_details, add_prediction_details, IST
-    from style_utils import (
+    from utils.track_utils import add_page_visited_details, add_prediction_details, IST
+    from utils.style_utils import (
         COLOR_PALETTE, 
         EMOTION_COLORS, 
         render_gradient_header, 
@@ -166,29 +166,40 @@ def render_home_page():
         
         # Show features section if no analysis is happening yet
         if not submit_text or not raw_text:
+            # First, create the header of the card
             st.markdown("""
             <div class="card-container">
                 <h3 style="margin-top: 0;">How It Works</h3>
                 <p>Our AI-powered emotion detection system analyzes the subtleties of language to identify the emotions expressed in your text.</p>
-                
-                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px;">
-                    <div style="flex: 1; min-width: 200px; background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
-                        <div style="font-size: 1.8rem; margin-bottom: 10px;">📝</div>
-                        <h4 style="margin-top: 0;">Input Your Text</h4>
-                        <p style="margin-bottom: 0;">Enter any text you'd like to analyze for emotional content.</p>
-                    </div>
-                    
-                    <div style="flex: 1; min-width: 200px; background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
-                        <div style="font-size: 1.8rem; margin-bottom: 10px;">⚙️</div>
-                        <h4 style="margin-top: 0;">AI Analysis</h4>
-                        <p style="margin-bottom: 0;">Our machine learning model identifies emotional patterns in your text.</p>
-                    </div>
-                    
-                    <div style="flex: 1; min-width: 200px; background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
-                        <div style="font-size: 1.8rem; margin-bottom: 10px;">📊</div>
-                        <h4 style="margin-top: 0;">Emotion Results</h4>
-                        <p style="margin-bottom: 0;">View the detected emotions and their probability distribution.</p>
-                    </div>
-                </div>
             </div>
             """, unsafe_allow_html=True)
+
+            # Then create three separate cards for each step
+            col1, col2, col3 = st.columns(3)
+
+            with col1:
+                st.markdown("""
+                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
+                    <div style="font-size: 1.8rem; margin-bottom: 10px;">📝</div>
+                    <h4 style="margin-top: 0;">Input Your Text</h4>
+                    <p style="margin-bottom: 0;">Enter any text you'd like to analyze for emotional content.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+            with col2:
+                st.markdown("""
+                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
+                    <div style="font-size: 1.8rem; margin-bottom: 10px;">⚙️</div>
+                    <h4 style="margin-top: 0;">AI Analysis</h4>
+                    <p style="margin-bottom: 0;">Our machine learning model identifies emotional patterns in your text.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+            with col3:
+                st.markdown("""
+                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
+                    <div style="font-size: 1.8rem; margin-bottom: 10px;">📊</div>
+                    <h4 style="margin-top: 0;">Emotion Results</h4>
+                    <p style="margin-bottom: 0;">View the detected emotions and their probability distribution.</p>
+                </div>
+                """, unsafe_allow_html=True)

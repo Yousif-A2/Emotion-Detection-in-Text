@@ -239,22 +239,43 @@ def render_monitor_page():
                     fig.update_traces(textposition='inside', textinfo='percent+label')
                     
                     st.plotly_chart(fig, use_container_width=True)
-                
-                # Display confidence distribution
+                                    
+                # Create histogram for confidence levels    
                 st.markdown("""<h4>Confidence Distribution</h4>""", unsafe_allow_html=True)
-                
-                # Create histogram for confidence levels
-                confidence_hist = alt.Chart(emotion_analytics).mark_bar().encode(
-                    x=alt.X('Probability:Q', bin=alt.Bin(maxbins=10), title='Confidence Level'),
-                    y=alt.Y('count()', title='Number of Predictions'),
-                    color=alt.value(COLOR_PALETTE["primary"]),
-                    tooltip=[alt.Tooltip('count()', title='Count'), alt.Tooltip('Probability:Q', title='Confidence')]
-                ).properties(
-                    height=200
-                )
-                
-                st.altair_chart(confidence_hist, use_container_width=True)
-                
+
+                try:
+                    # Make sure Probability is a numeric column
+                    emotion_analytics['Probability'] = pd.to_numeric(emotion_analytics['Probability'], errors='coerce')
+                    
+                    # Drop any rows with NaN values
+                    emotion_analytics_clean = emotion_analytics.dropna(subset=['Probability'])
+                    
+                    if not emotion_analytics_clean.empty:
+                        # Create histogram for confidence levels
+                        confidence_hist = alt.Chart(emotion_analytics_clean).mark_bar().encode(
+                            x=alt.X('Probability:Q', 
+                                    bin=alt.Bin(maxbins=10), 
+                                    title='Confidence Level',
+                                    scale=alt.Scale(domain=[0, 1])),  # Set domain from 0 to 1
+                            y=alt.Y('count()', title='Number of Predictions'),
+                            tooltip=[
+                                alt.Tooltip('count()', title='Count'), 
+                                alt.Tooltip('Probability:Q', title='Confidence', format='.1%')
+                            ]
+                        ).properties(
+                            height=450
+                        ).configure_mark(
+                            color=COLOR_PALETTE["primary"]
+                        )
+                        
+                        st.altair_chart(confidence_hist, use_container_width=True)
+                    else:
+                        st.info("No confidence data available for histogram.")
+                except Exception as e:
+                    st.error(f"Error generating confidence histogram: {e}")
+                    # Fallback to a simple text description
+                    st.write("Confidence distribution visualization is not available.")
+            
                 # Display recent predictions
                 st.markdown("""<h4>Recent Predictions</h4>""", unsafe_allow_html=True)
                 
@@ -268,7 +289,7 @@ def render_monitor_page():
                 # Format for display
                 display_df = recent_predictions.copy()
                 display_df['Time'] = display_df['Time_of_Visit'].dt.strftime('%Y-%m-%d %H:%M')
-                display_df['Confidence'] = (display_df['Probability'] * 100).round(1).astype(str) + '%'
+                display_df['Confidence'] = (display_df['Probability'].astype(float) * 100).round(1).astype(str) + '%'
                 display_df = display_df[['Time', 'Prediction', 'Confidence', 'Rawtext']].rename(columns={'Rawtext': 'Text'})
                 
                 # Truncate text if too long

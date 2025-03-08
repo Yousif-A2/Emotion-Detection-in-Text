@@ -128,7 +128,7 @@ def render_home_page():
                 # Probability visualization card
                 st.markdown("""
                 <div class="card-container">
-                    <h3 style="margin-top: 0;">Emotion Probability Distribution</h3>
+                    <h3 style="margin-top: 0;">Emotion Probability Distribution:</h3>
                 """, unsafe_allow_html=True)
                 
                 # Create probability dataframe

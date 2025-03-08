@@ -171,7 +171,7 @@ def render_gradient_header(title, subtitle):
     <div style="text-align: center; padding: 1rem 0;">
         <h1 style="font-size: 2.8rem; font-weight: 700; 
             background: linear-gradient(45deg, {COLOR_PALETTE['primary']}, {COLOR_PALETTE['secondary']}); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem;">
+            -webkit-background-clip: text;  margin-bottom: 0.5rem;">
             {title}
         </h1>
     

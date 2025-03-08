@@ -66,7 +66,7 @@ def apply_custom_styles():
             margin-bottom: 1.5rem;
             background: linear-gradient(45deg, {COLOR_PALETTE["primary"]}, {COLOR_PALETTE["secondary"]});
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        #    -webkit-text-fill-color: transparent;
             padding: 0.5rem 0;
         }}
         

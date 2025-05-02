@@ -13,8 +13,9 @@ try:
         render_gradient_header, 
         render_card, 
         get_emotion_icon,
-        create_altair_therender_cardme
+        create_altair_theme
     )
+    from utils.recommendations_utils import get_emotion_recommendations
 except ImportError:
     # Fallback to direct imports
     from utils.track_utils import add_page_visited_details, add_prediction_details, IST
@@ -26,6 +27,7 @@ except ImportError:
         get_emotion_icon,
         create_altair_theme
     )
+    from utils.recommendations_utils import get_emotion_recommendations
 
 # Register the custom theme for Altair charts
 alt.themes.register('emotion_theme', create_altair_theme)
@@ -160,6 +162,39 @@ def render_home_page():
                 
                 st.altair_chart(chart, use_container_width=True)
                 st.markdown("</div>", unsafe_allow_html=True)
+            
+            # Get recommendations based on detected emotion
+            recommendations = get_emotion_recommendations(prediction)
+
+            list_items_html = ""
+            for strategy in recommendations['strategies']:
+                list_items_html += f"<li style=\"margin-bottom: 8px;\">{strategy}</li>\n"
+            
+            # Display recommendations section 
+            st.markdown(f"""
+            <div class="card-container">
+                        <h3 style="margin-top: 0; color: {emotion_color};">
+                        <i class="fas fa-lightbulb" style="margin-right: 10px;"></i>
+                        {recommendations['title']}
+                        </h3>
+                        <p style="margin-bottom: 20px;">{recommendations['description']}</p>
+                        <div style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                        <h4 style="margin-top: 0;">Recommended Strategies:</h4>
+                        <ul style="margin-bottom: 0; padding-left: 20px;">
+                        {list_items_html}
+                        
+            """, unsafe_allow_html=True)
+
+            st.markdown(f"""
+                        <div style="background: linear-gradient(90deg, {emotion_color}22, {emotion_color}00); border-left: 4px solid {emotion_color}; padding: 15px; border-radius: 4px;">
+                        <p style="font-style: italic; margin: 0;">{recommendations['quote']}</p>
+                        </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+            # Close the list and add the quote
+
+            
         
         elif submit_text and not raw_text:
             st.warning("Please enter some text to analyze")
@@ -174,12 +209,12 @@ def render_home_page():
             </div>
             """, unsafe_allow_html=True)
 
-            # Then create three separate cards for each step
-            col1, col2, col3 = st.columns(3)
+            # Then create four separate cards for each step (added one for recommendations)
+            col1, col2, col3, col4 = st.columns(4)
 
             with col1:
                 st.markdown("""
-                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
+                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px; height: 100%;">
                     <div style="font-size: 1.8rem; margin-bottom: 10px;">📝</div>
                     <h4 style="margin-top: 0;">Input Your Text</h4>
                     <p style="margin-bottom: 0;">Enter any text you'd like to analyze for emotional content.</p>
@@ -188,7 +223,7 @@ def render_home_page():
 
             with col2:
                 st.markdown("""
-                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
+                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px; height: 100%;">
                     <div style="font-size: 1.8rem; margin-bottom: 10px;">⚙️</div>
                     <h4 style="margin-top: 0;">AI Analysis</h4>
                     <p style="margin-bottom: 0;">Our machine learning model identifies emotional patterns in your text.</p>
@@ -197,9 +232,18 @@ def render_home_page():
 
             with col3:
                 st.markdown("""
-                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
+                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px; height: 100%;">
                     <div style="font-size: 1.8rem; margin-bottom: 10px;">📊</div>
                     <h4 style="margin-top: 0;">Emotion Results</h4>
                     <p style="margin-bottom: 0;">View the detected emotions and their probability distribution.</p>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            with col4:
+                st.markdown("""
+                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px; height: 100%;">
+                    <div style="font-size: 1.8rem; margin-bottom: 10px;">💡</div>
+                    <h4 style="margin-top: 0;">Personalized Recommendations</h4>
+                    <p style="margin-bottom: 0;">Receive tailored suggestions based on your emotional state.</p>
                 </div>
                 """, unsafe_allow_html=True)

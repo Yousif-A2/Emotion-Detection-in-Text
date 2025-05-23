@@ -1,6 +1,3 @@
-Sure! Here's a creative and polished `README.md` file for your GitHub project **Emotion-Detection-in-Text**, highlighting your work professionally and making it more engaging for potential users or collaborators.
-
----
 
 ````markdown
 # 🧠 Emotion Detection in Text 🎭
@@ -125,8 +122,3 @@ MIT License. Do what you love — just give credit. ❤️
 
 > *“Words are free. It’s how you use them that may cost you.”*
 > — Emotion Detection helps you know how your words feel.
-
-```
-
-Would you like me to create a downloadable `.md` file for it?
-```

@@ -1,5 +1,4 @@
 
-````markdown
 # 🧠 Emotion Detection in Text 🎭
 
 Welcome to **Emotion Detection in Text** — a powerful, AI-driven tool that understands the emotion behind words. Whether you're analyzing user feedback, monitoring chat sentiment, or building an empathetic chatbot, this project brings human emotion into focus using cutting-edge NLP techniques.
